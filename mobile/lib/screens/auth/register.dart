@@ -100,8 +100,6 @@ class RegisterScreen extends StatelessWidget {
                     );
 
                     if (signUpResponse != null) {
-                      // Berhasil mendaftar, lakukan navigasi atau tampilkan pesan sukses
-                      // Misalnya: Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
                       print('Berhasil mendaftar: ${signUpResponse.message}');
                       Navigator.pushReplacement(
                         context,
@@ -110,11 +108,9 @@ class RegisterScreen extends StatelessWidget {
                         ),
                       );
                     } else {
-                      // Gagal mendaftar, tampilkan pesan atau action sesuai kebutuhan
                       print('Gagal mendaftar');
                     }
                   } else {
-                    // Password dan konfirmasi password tidak cocok, tampilkan pesan kesalahan
                     print('Password dan konfirmasi password tidak cocok');
                   }
                 },
