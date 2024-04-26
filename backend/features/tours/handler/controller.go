@@ -125,9 +125,6 @@ func (ctl *controller) UpdateTours() echo.HandlerFunc {
 		input := dtos.InputTours{}
 
 		fileHeader, err := ctx.FormFile("images")
-		if err != nil {
-			return ctx.JSON(409, helpers.Response("failed to upload images"))
-		}
 
 		toursID, errParam := strconv.Atoi(ctx.Param("id"))
 

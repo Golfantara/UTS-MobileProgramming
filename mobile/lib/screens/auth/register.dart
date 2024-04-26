@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:tour_app/screens/auth/login.dart';
 import 'package:tour_app/screens/auth/main.dart';
+import 'package:tour_app/services/services_signup.dart';
+import 'package:tour_app/model/model_signup.dart';
 
 class RegisterScreen extends StatelessWidget {
-  const RegisterScreen({super.key});
+  const RegisterScreen({Key? key});
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController username = TextEditingController();
-    TextEditingController fullname = TextEditingController();
-    TextEditingController password = TextEditingController();
-    TextEditingController cpassword = TextEditingController();
+    final TextEditingController username = TextEditingController();
+    final TextEditingController fullname = TextEditingController();
+    final TextEditingController password = TextEditingController();
+    final TextEditingController cpassword = TextEditingController();
+
+    final SignUpService _signUpService = SignUpService();
 
     return Scaffold(
       appBar: AppBar(
@@ -86,11 +90,33 @@ class RegisterScreen extends StatelessWidget {
             FractionallySizedBox(
               widthFactor: 0.7,
               child: ElevatedButton(
-                onPressed: () {
-                  print('Username: ${username.text}');
-                  print('Email: ${fullname.text}');
-                  print('Password: ${password.text}');
-                  print('Konfirmasi Password: ${cpassword.text}');
+                onPressed: () async {
+                  if (password.text == cpassword.text) {
+                    ModelSignUp? signUpResponse =
+                        await _signUpService.signUpAccount(
+                      username.text,
+                      fullname.text,
+                      password.text,
+                    );
+
+                    if (signUpResponse != null) {
+                      // Berhasil mendaftar, lakukan navigasi atau tampilkan pesan sukses
+                      // Misalnya: Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+                      print('Berhasil mendaftar: ${signUpResponse.message}');
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => LoginScreen(),
+                        ),
+                      );
+                    } else {
+                      // Gagal mendaftar, tampilkan pesan atau action sesuai kebutuhan
+                      print('Gagal mendaftar');
+                    }
+                  } else {
+                    // Password dan konfirmasi password tidak cocok, tampilkan pesan kesalahan
+                    print('Password dan konfirmasi password tidak cocok');
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.tealAccent[700],

@@ -111,7 +111,7 @@ func (svc *service) Modify(toursData dtos.InputTours, toursID int, file *multipa
 
 	if file != nil {
 		var err error
-		url, err = svc.model.UploadFile(file, toursData.Name)
+		url, err = svc.model.UploadFile(file, toursData.Images)
 		if err != nil {
 			log.Error("failed upload images")
 			return false
