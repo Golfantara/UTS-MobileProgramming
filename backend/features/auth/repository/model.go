@@ -53,3 +53,16 @@ func (mdl *model) SelectByUsername(username string) (*auth.User, error) {
 
 	return &user, nil
 }
+
+func (mdl *model) SelectByID(userID int) *auth.User {
+	var user auth.User
+
+	result := mdl.db.First(&user, userID)
+
+	if result.Error != nil {
+		log.Error(result.Error)
+		return nil
+	}
+
+	return &user
+}

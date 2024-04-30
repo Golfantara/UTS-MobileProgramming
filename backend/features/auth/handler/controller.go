@@ -88,3 +88,18 @@ func (ctl *controller) RefreshJWT() echo.HandlerFunc {
 		}))
 	}
 }
+
+func (ctl *controller) MyProfile() echo.HandlerFunc {
+	return func(ctx echo.Context) error {
+		userID := ctx.Get("user_id").(int)
+
+		user := ctl.service.MyProfile(userID)
+		if user == nil {
+			return ctx.JSON(404, helpers.Response("user not found"))
+		}
+		
+		return ctx.JSON(200, helpers.Response("succes", map[string]any{
+			"data": user,
+		}))
+	}
+}

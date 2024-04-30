@@ -15,4 +15,5 @@ func Auth(e *echo.Echo, handler auth.Handler, jwt helpers.JWTInterface, config c
 	auth.POST("/register", handler.RegisterUser())
 	auth.POST("/login", handler.Login())
 	auth.POST("/refresh-jwt", handler.RefreshJWT(), m.AuthorizeJWT(jwt, 3, config.SECRET) )
+	auth.GET("/me", handler.MyProfile(), m.AuthorizeJWT(jwt, 3, config.SECRET))
 }

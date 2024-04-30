@@ -135,3 +135,22 @@ func (svc *service) ValidateInput( input dtos.InputUser) ([]string, error){
 	}
 	return errorList, nil
 }
+
+func (svc *service) MyProfile(UserID int) *dtos.ResUser {
+	res := dtos.ResUser{}
+
+	user := svc.model.SelectByID(UserID)
+
+	if user == nil {
+		return nil
+	}
+
+	err := smapping.FillStruct(&res, smapping.MapFields(user))
+
+	if err != nil {
+		log.Error(err)
+		return nil
+	}
+
+	return &res
+}
