@@ -142,10 +142,13 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
                       setState(() {
                         province = newValue!;
                       });
+                      setState(() {
+                        regency = null;
+                      });
                       _fetchRegencies(newValue!);
                     },
                     items: provincesData.map((Map<String, String> province) {
-                      return DropdownMenuItem<String>(
+                      return DropdownMenuItem(
                         value: province['id'],
                         child: Text(province['name']!),
                       );
@@ -170,7 +173,7 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
                         });
                       },
                       items: regenciesData.map((Map<String, String> regency) {
-                        return DropdownMenuItem<String>(
+                        return DropdownMenuItem(
                           value: regency['id'],
                           child: Text(regency['name']!),
                         );
@@ -240,7 +243,7 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
                     child: ElevatedButton(
                         onPressed: () async {
                           print(
-                              "Latitude: ${latitude.text} Longitude: ${longitude.text} Image: ${_image} Name: ${name.text}  Provinsi: ${province} Kabkot: ${regency}");
+                              "Latitude: ${latitude.text} Longitude: ${longitude.text} Image: ${_image} Name: ${name.text}  Provinsi: ${provincesData.firstWhere((element) => element['id'] == province)['name']}  Kabkot: ${regenciesData.firstWhere((element) => element['id'] == regency)['name']}");
                         },
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.tealAccent[700],
