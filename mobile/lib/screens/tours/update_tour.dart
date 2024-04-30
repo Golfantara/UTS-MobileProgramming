@@ -4,15 +4,15 @@ import 'package:image_picker/image_picker.dart';
 import 'package:tour_app/services/services_province.dart';
 import 'package:tour_app/services/services_regency.dart';
 
-class CreateTourScreen extends StatefulWidget {
-  const CreateTourScreen({super.key});
+class UpdateTourScreen extends StatefulWidget {
+  const UpdateTourScreen({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
-  _CreateTourScreenState createState() => _CreateTourScreenState();
+  _UpdateTourScreenState createState() => _UpdateTourScreenState();
 }
 
-class _CreateTourScreenState extends State<CreateTourScreen> {
+class _UpdateTourScreenState extends State<UpdateTourScreen> {
   TextEditingController name = TextEditingController();
   TextEditingController latitude = TextEditingController();
   TextEditingController longitude = TextEditingController();
@@ -251,7 +251,7 @@ class _CreateTourScreenState extends State<CreateTourScreen> {
                           padding: EdgeInsets.symmetric(
                               horizontal: 40, vertical: 12),
                           child: Text(
-                            'Simpan data',
+                            'Simpan perubahan data',
                             style: TextStyle(color: Colors.white),
                           ),
                         ))),
