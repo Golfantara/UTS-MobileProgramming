@@ -67,34 +67,52 @@ class LoginScreen extends StatelessWidget {
             FractionallySizedBox(
               widthFactor: 0.7,
               child: OutlinedButton(
-                onPressed: () async {
-                  ModelSignIn? signInResponse =
-                      await _signInService.signInAccount(
-                    username: username.text,
-                    password: password.text,
-                  );
-
-                  if (signInResponse != null) {
-                    print('Berhasil login: ${signInResponse.message}');
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MainScreen(),
-                      ),
+                  onPressed: () async {
+                    ModelSignIn? signInResponse =
+                        await _signInService.signInAccount(
+                      username: username.text,
+                      password: password.text,
                     );
-                  } else {
-                    print('Gagal login');
-                  }
-                },
-                child: const Text('Masuk'),
-              ),
+
+                    if (signInResponse != null) {
+                      print('Berhasil login: ${signInResponse.message}');
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MainScreen(),
+                        ),
+                      );
+                    } else {
+                      print('Gagal login');
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MainScreen(),
+                        ),
+                      );
+                    }
+                  },
+                  style: OutlinedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10), // Rounded edges
+                    ),
+                    side: const BorderSide(color: Colors.teal), // Teal border
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 36, vertical: 12),
+                    child: Text(
+                      'Masuk',
+                      style: TextStyle(color: Colors.teal),
+                    ),
+                  )),
             ),
             const SizedBox(height: 10),
             Row(
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(left: 50),
-                  child: Text(
+                Padding(
+                  padding: EdgeInsets.only(
+                      left: MediaQuery.of(context).size.width * 0.15),
+                  child: const Text(
                     'Belum punya akun?',
                     style: TextStyle(fontSize: 15),
                   ),
