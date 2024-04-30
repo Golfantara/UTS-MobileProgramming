@@ -252,8 +252,7 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
                               borderRadius: BorderRadius.circular(10),
                             )),
                         child: const Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 40, vertical: 12),
+                          padding: EdgeInsets.symmetric(vertical: 14),
                           child: Text(
                             'Simpan perubahan data',
                             style: TextStyle(color: Colors.white),
