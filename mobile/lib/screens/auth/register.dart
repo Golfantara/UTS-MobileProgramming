@@ -136,7 +136,7 @@ class RegisterScreen extends StatelessWidget {
                   padding: EdgeInsets.only(
                       left: MediaQuery.of(context).size.width * 0.15),
                   child: const Text(
-                    'Sudah punya akun?',
+                    'Sudah punya akun ?',
                     style: TextStyle(fontSize: 15),
                   ),
                 ),

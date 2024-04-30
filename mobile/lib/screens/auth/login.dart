@@ -113,7 +113,7 @@ class LoginScreen extends StatelessWidget {
                   padding: EdgeInsets.only(
                       left: MediaQuery.of(context).size.width * 0.15),
                   child: const Text(
-                    'Belum punya akun?',
+                    'Belum punya akun ?',
                     style: TextStyle(fontSize: 15),
                   ),
                 ),

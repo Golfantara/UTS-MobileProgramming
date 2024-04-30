@@ -109,7 +109,8 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: const Text('Buat Tour', style: TextStyle(color: Colors.teal)),
+          title:
+              const Text('Update Tour', style: TextStyle(color: Colors.teal)),
         ),
         body: SingleChildScrollView(
           child: Center(
