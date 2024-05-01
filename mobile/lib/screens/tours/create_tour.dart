@@ -6,6 +6,7 @@ import 'package:tour_app/screens/tours/get_tours.dart';
 import 'package:tour_app/services/services_create_tours.dart';
 import 'package:tour_app/services/services_province.dart';
 import 'package:tour_app/services/services_regency.dart';
+import 'dart:convert';
 
 class CreateTourScreen extends StatefulWidget {
   const CreateTourScreen({super.key});
@@ -45,15 +46,18 @@ class _CreateTourScreenState extends State<CreateTourScreen> {
   }
 
   Future<void> _createTour(
-      dynamic name,
-      dynamic provinsi,
-      dynamic kabkot,
-      dynamic latitude,
-      dynamic longtitude,
+      String name,
+      String provinsi,
+      String kabkot,
+      String latitude,
+      String longtitude,
       dynamic images,
-      dynamic accessToken) async {
+      String accessToken) async {
+    List<int> imageBytes = await _image!.readAsBytes();
+    String base64Image = base64Encode(imageBytes);
+
     final data = await _toursServices.CreateTour(
-        name, provinsi, kabkot, latitude, longtitude, images, accessToken);
+        name, provinsi, kabkot, latitude, longtitude, base64Image, accessToken);
 
     if (data != null) {
       Navigator.push(
@@ -276,8 +280,17 @@ class _CreateTourScreenState extends State<CreateTourScreen> {
                     widthFactor: 0.7,
                     child: ElevatedButton(
                         onPressed: () async {
-                          _createTour(name, province, regency, latitude,
-                              longtitude, _image, accessToken);
+                          _createTour(
+                            name.text, // Gunakan name.text untuk mengambil nilai dari TextEditingController
+                            province!,
+                            regency!,
+                            latitude
+                                .text, // Gunakan latitude.text untuk mengambil nilai dari TextEditingController
+                            longtitude
+                                .text, // Gunakan longtitude.text untuk mengambil nilai dari TextEditingController
+                            _image!,
+                            accessToken!,
+                          );
                         },
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.tealAccent[700],

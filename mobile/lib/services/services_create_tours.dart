@@ -5,13 +5,13 @@ class ToursServices {
   final Dio _dio = Dio();
 
   Future CreateTour(
-      dynamic name,
-      dynamic provinsi,
-      dynamic kabkot,
-      dynamic latitude,
-      dynamic longtitude,
+      String name,
+      String provinsi,
+      String kabkot,
+      String latitude,
+      String longtitude,
       dynamic images,
-      dynamic accessToken) async {
+      String? accessToken) async {
     try {
       final response = await _dio.post(
         Urls.baseUrl + Urls.tours,
