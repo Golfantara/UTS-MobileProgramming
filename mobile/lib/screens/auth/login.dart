@@ -5,16 +5,85 @@ import 'package:tour_app/screens/auth/main.dart';
 import 'package:tour_app/screens/tours/main.dart';
 import 'package:tour_app/services/services_signin.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController username = TextEditingController();
+  final TextEditingController password = TextEditingController();
+
+  bool isButtonDisabled = true;
+  bool isLoading = false;
+
+  final SignInService _signInService = SignInService();
+
+  @override
+  void initState() {
+    super.initState();
+    username.addListener(validateInput);
+    password.addListener(validateInput);
+  }
+
+  void validateInput() {
+    setState(() {
+      isButtonDisabled =
+          !(username.text.isNotEmpty && password.text.isNotEmpty);
+    });
+  }
+
+  Future<void> signIn() async {
+    setState(() {
+      isLoading = true;
+    });
+
+    ModelSignIn? signInResponse = await _signInService.signInAccount(
+      username: username.text,
+      password: password.text,
+    );
+
+    if (signInResponse != null) {
+      Navigator.pushReplacement(
+        // ignore: use_build_context_synchronously
+        context,
+        MaterialPageRoute(
+          builder: (context) => const MainScreen(),
+        ),
+      );
+    } else {
+      setState(() {
+        isLoading = false;
+      });
+
+      showDialog(
+        // ignore: use_build_context_synchronously
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Error'),
+            content: const Text(
+              'Terjadi kesalahan saat melakukan login',
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController username = TextEditingController();
-    final TextEditingController password = TextEditingController();
-
-    final SignInService _signInService = SignInService();
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Masuk Akun'),
@@ -67,44 +136,37 @@ class LoginScreen extends StatelessWidget {
             FractionallySizedBox(
               widthFactor: 0.7,
               child: OutlinedButton(
-                  onPressed: () async {
-                    ModelSignIn? signInResponse =
-                        await _signInService.signInAccount(
-                      username: username.text,
-                      password: password.text,
-                    );
-
-                    if (signInResponse != null) {
-                      print('Berhasil login: ${signInResponse.message}');
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MainScreen(),
-                        ),
-                      );
-                    } else {
-                      print('Gagal login');
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => MainScreen(),
-                        ),
-                      );
-                    }
-                  },
-                  style: OutlinedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10), // Rounded edges
-                    ),
-                    side: const BorderSide(color: Colors.teal), // Teal border
+                onPressed: isButtonDisabled || isLoading ? null : signIn,
+                style: OutlinedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 36, vertical: 12),
-                    child: Text(
-                      'Masuk',
-                      style: TextStyle(color: Colors.teal),
-                    ),
-                  )),
+                  side: BorderSide(
+                    color: isButtonDisabled || isLoading
+                        ? Colors.grey
+                        : Colors.teal,
+                  ),
+                ),
+                child: isLoading
+                    ? const Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 36, vertical: 12),
+                        child: SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(color: Colors.teal),
+                        ))
+                    : Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 36, vertical: 12),
+                        child: Text(
+                          'Masuk',
+                          style: TextStyle(
+                              color:
+                                  isButtonDisabled ? Colors.grey : Colors.teal),
+                        ),
+                      ),
+              ),
             ),
             const SizedBox(height: 10),
             Row(
