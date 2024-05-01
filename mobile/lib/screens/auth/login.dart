@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tour_app/model/model_signin.dart';
 import 'package:tour_app/screens/auth/register.dart';
 import 'package:tour_app/screens/auth/main.dart';
@@ -29,6 +30,11 @@ class _LoginScreenState extends State<LoginScreen> {
     password.addListener(validateInput);
   }
 
+  void setAccessToken(String token) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('accessToken', token);
+  }
+
   void validateInput() {
     setState(() {
       isButtonDisabled =
@@ -47,6 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
 
     if (signInResponse != null) {
+      setAccessToken(signInResponse.data.accessToken);
       Navigator.pushReplacement(
         // ignore: use_build_context_synchronously
         context,

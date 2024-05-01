@@ -29,22 +29,26 @@ class Data {
   String username;
   String fullname;
   int roleId;
+  String accessToken;
 
   Data({
     required this.username,
     required this.fullname,
     required this.roleId,
+    required this.accessToken,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         fullname: json["fullname"],
         username: json["username"],
         roleId: json["role_id"],
+        accessToken: json["access_token"],
       );
 
   Map<String, dynamic> toJson() => {
         "fullname": fullname,
         "email": username,
         "role_id": roleId,
+        "access_token": accessToken,
       };
 }
