@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tour_app/screens/tours/create_tour.dart';
 import 'package:dio/dio.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -103,57 +104,57 @@ class _GetTourScreenState extends State<GetTourScreen> {
                                           const SizedBox(width: 10),
                                           Expanded(
                                             child: Text(
-                                              item['title'],
+                                              item['name'],
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                           ),
                                         ],
                                       ),
                                       const SizedBox(height: 5),
-                                      const Row(children: [
-                                        Text('Provinsi'),
-                                        SizedBox(width: 63),
-                                        Text(':'),
-                                        SizedBox(width: 10),
+                                      Row(children: [
+                                        const Text('Provinsi'),
+                                        const SizedBox(width: 63),
+                                        const Text(':'),
+                                        const SizedBox(width: 10),
                                         Expanded(
                                             child: Text(
-                                          'Jawa Tengah',
+                                          item['provinsi'],
                                           overflow: TextOverflow.ellipsis,
                                         )),
                                       ]),
                                       const SizedBox(height: 5),
-                                      const Row(children: [
-                                        Text('Kabupaten/Kota'),
-                                        SizedBox(width: 10),
-                                        Text(':'),
-                                        SizedBox(width: 10),
+                                      Row(children: [
+                                        const Text('Kabupaten/Kota'),
+                                        const SizedBox(width: 10),
+                                        const Text(':'),
+                                        const SizedBox(width: 10),
                                         Expanded(
                                             child: Text(
-                                          'Cirebon',
+                                          item['kabkot'],
                                           overflow: TextOverflow.ellipsis,
                                         ))
                                       ]),
                                       const SizedBox(height: 5),
-                                      const Row(children: [
-                                        Text('Latitude'),
-                                        SizedBox(width: 62),
-                                        Text(':'),
-                                        SizedBox(width: 10),
+                                      Row(children: [
+                                        const Text('latitude'),
+                                        const SizedBox(width: 62),
+                                        const Text(':'),
+                                        const SizedBox(width: 10),
                                         Expanded(
                                             child: Text(
-                                          '123123123123',
+                                          item['latitude'],
                                           overflow: TextOverflow.ellipsis,
                                         )),
                                       ]),
                                       const SizedBox(height: 5),
-                                      const Row(children: [
-                                        Text('Longitude'),
-                                        SizedBox(width: 49),
-                                        Text(':'),
-                                        SizedBox(width: 10),
+                                      Row(children: [
+                                        const Text('Longtitude'),
+                                        const SizedBox(width: 49),
+                                        const Text(':'),
+                                        const SizedBox(width: 10),
                                         Expanded(
                                             child: Text(
-                                          '123123123123',
+                                          item['longtitude'],
                                           overflow: TextOverflow.ellipsis,
                                         )),
                                       ])
@@ -162,7 +163,7 @@ class _GetTourScreenState extends State<GetTourScreen> {
                                 ),
                                 const SizedBox(height: 10),
                                 Image.network(
-                                  "https://upload.wikimedia.org/wikipedia/commons/d/d1/Image_not_available.png",
+                                  item['images'],
                                   height: 200,
                                 ),
                                 const SizedBox(height: 10),
@@ -234,12 +235,15 @@ class _GetTourScreenState extends State<GetTourScreen> {
   }
 
   Future<void> _fetchPage(int pageKey) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       final dio = Dio();
-      final url =
-          'https://jsonplaceholder.typicode.com/posts?_page=$pageKey&_limit=5';
-      final response = await dio.get(url);
-      final List<dynamic> data = response.data;
+      final url = 'http://localhost:8000/tours?page=$pageKey&page_size=5';
+      final response = await dio.get(url,
+          options: Options(headers: {
+            'Authorization': 'Bearer ${prefs.getString('accessToken')}'
+          }));
+      final List<dynamic> data = response.data['data'];
       final isLastPage = data.isEmpty;
       if (isLastPage) {
         _pagingController.appendLastPage(data);
