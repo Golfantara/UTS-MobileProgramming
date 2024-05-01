@@ -9,7 +9,7 @@ import (
 )
 
 type Repository interface {
-	Paginate(page, size int) []Tours
+	Paginate(userID, page, size int) []Tours
 	Insert(newTours *Tours) (*Tours, error)
 	SelectByID(toursID int) *Tours
 	Update(tours Tours) int64
@@ -20,9 +20,9 @@ type Repository interface {
 }
 
 type Usecase interface {
-	FindAll(page, size int) ([]dtos.ResTours, int64) 
+	FindAll(UserID, page, size int) ([]dtos.ResTours, int64) 
 	FindByID(newsID int) *dtos.ResTours
-	Create(newNews dtos.InputTours,file *multipart.FileHeader) (*dtos.ResTours,[]string, error)
+	Create(newNews dtos.InputTours,UserID int ,file *multipart.FileHeader) (*dtos.ResTours,[]string, error)
 	Modify(newsData dtos.InputTours, newsID int, file *multipart.FileHeader) bool
 	Remove(newsID int) bool
 }

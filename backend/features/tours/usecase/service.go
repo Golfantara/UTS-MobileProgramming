@@ -26,10 +26,10 @@ func New(model tours.Repository, validator helpers.ValidationInterface) tours.Us
 	}
 }
 
-func (svc *service) FindAll(page, size int) ([]dtos.ResTours, int64) {
+func (svc *service) FindAll(UserID, page, size int) ([]dtos.ResTours, int64) {
 	var tourss []dtos.ResTours
 
-	tourssEnt := svc.model.Paginate(page, size)
+	tourssEnt := svc.model.Paginate(UserID, page, size)
 	
 
 	for _, tours := range tourssEnt {
@@ -56,6 +56,7 @@ func (svc *service) FindByID(toursID int) *dtos.ResTours {
 	}
 
 	res.ID = tours.ID
+	res.UserID = tours.UserID
 	res.Name = tours.Name
 	res.Provinsi = tours.Provinsi
 	res.Kabkot = tours.Kabkot
@@ -66,7 +67,7 @@ func (svc *service) FindByID(toursID int) *dtos.ResTours {
 	return &res
 }
 
-func (svc *service) Create(newTours dtos.InputTours, file *multipart.FileHeader) (*dtos.ResTours,[]string, error) {
+func (svc *service) Create(newTours dtos.InputTours, UserID int, file *multipart.FileHeader) (*dtos.ResTours,[]string, error) {
 	tours := tours.Tours{}
 
 	if errorList, err := svc.ValidateInput(newTours, file); err != nil || len(errorList) > 0 {
@@ -78,6 +79,7 @@ func (svc *service) Create(newTours dtos.InputTours, file *multipart.FileHeader)
 	}
 
 	tours.ID = helpers.NewGenerator().GenerateRandomID()
+	tours.UserID = UserID
 	tours.Images = url
 	tours.Name = newTours.Name
 	tours.Provinsi = newTours.Provinsi
@@ -93,6 +95,7 @@ func (svc *service) Create(newTours dtos.InputTours, file *multipart.FileHeader)
 	}
 
 	resTours := dtos.ResTours{}
+	resTours.UserID = result.UserID
 	resTours.ID = result.ID
 	resTours.Name = result.Name
 	resTours.Provinsi = result.Provinsi
@@ -102,8 +105,6 @@ func (svc *service) Create(newTours dtos.InputTours, file *multipart.FileHeader)
 	resTours.Images = result.Images
 
 	return &resTours, nil,nil
-
-
 }
 
 func (svc *service) Modify(toursData dtos.InputTours, toursID int, file *multipart.FileHeader) bool {

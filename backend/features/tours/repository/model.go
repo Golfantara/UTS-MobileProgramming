@@ -29,12 +29,12 @@ func New(db *gorm.DB, cdn *cloudinary.Cloudinary, config *config.ProgramConfig) 
 	}
 }
 
-func (mdl *model) Paginate(page, size int) []tours.Tours {
+func (mdl *model) Paginate(userID, page, size int) []tours.Tours {
 	var tours []tours.Tours
 
 	offset := (page - 1) * size
 
-	result := mdl.db.Offset(offset).Limit(size).Find(&tours)
+	result := mdl.db.Where("user_id =?", userID).Offset(offset).Limit(size).Find(&tours)
 	
 	if result.Error != nil {
 		log.Error(result.Error)
@@ -110,7 +110,7 @@ func (mdl *model) UploadFile(fileHeader *multipart.FileHeader, name string) (str
 func (mdl *model) GetTotalDataTours() int64 {
 	var totalData int64
 
-	result := mdl.db.Table("news").Where("deleted_at IS NULL").Count(&totalData)
+	result := mdl.db.Table("tours").Where("deleted_at IS NULL").Count(&totalData)
 
 	if result.Error != nil {
 		log.Error(result.Error)

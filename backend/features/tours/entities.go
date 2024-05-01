@@ -10,6 +10,7 @@ type Tours struct {
 	gorm.Model
 
 	ID 			int 	`gorm:"type:int(11)"`
+	UserID      int     `gorm:"type:int(11)"`
 	Name		string  `gorm:"type:string"`
 	Provinsi 	string	`gorm:"type:string"`
 	Kabkot		string	`gorm:"type:string"`

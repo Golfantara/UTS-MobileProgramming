@@ -28,6 +28,7 @@ func (ctl *controller) GetTours() echo.HandlerFunc {
 	return func (ctx echo.Context) error  {
 		pagination := dtos.Pagination{}
 		ctx.Bind(&pagination)
+		userID := ctx.Get("user_id").(int)
 
 		if pagination.Page < 1 || pagination.Size < 1 {
 			pagination.Page = 1
@@ -37,9 +38,9 @@ func (ctl *controller) GetTours() echo.HandlerFunc {
 		page := pagination.Page
 		size := pagination.Size
 
-		tourss, totalData := ctl.service.FindAll(page, size)
+		tourss, totalData := ctl.service.FindAll(userID, page, size)
 
-		if tourss == nil {
+		if len(tourss) == 0 {
 			return ctx.JSON(404, helpers.Response("There is No Tours!", map[string]any{
 				"data": []string{},
 			}))
@@ -80,7 +81,7 @@ func (ctl *controller) ToursDetails() echo.HandlerFunc {
 func (ctl *controller) CreateTours() echo.HandlerFunc {
 	return func(ctx echo.Context) error {
 		input := dtos.InputTours{}
-		filHeader, err := ctx.FormFile("images")
+		fileHeader, err := ctx.FormFile("images")
 		if err != nil {
 			return ctx.JSON(400, helpers.Response("missing some data", map[string]any{
 				"error": err,
@@ -88,8 +89,9 @@ func (ctl *controller) CreateTours() echo.HandlerFunc {
 		}
 
 		ctx.Bind(&input)
+		userID := ctx.Get("user_id").(int)
 
-		validate = validator.New(validator.WithRequiredStructEnabled())
+		validate := validator.New(validator.WithRequiredStructEnabled())
 
 		err = validate.Struct(input)
 
@@ -100,7 +102,7 @@ func (ctl *controller) CreateTours() echo.HandlerFunc {
 			}))
 		}
 
-		tours,errMap, err := ctl.service.Create(input,filHeader)
+		tours,errMap, err := ctl.service.Create(input, userID, fileHeader)
 		
 		if errMap != nil {
 			return ctx.JSON(400, helpers.Response("missing some data", map[string]any{

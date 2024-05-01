@@ -29,7 +29,7 @@ func main() {
 	
 	middlewares.LogMiddlewares(e)
 	routes.Auth(e, AuthHandler(), jwtService, *cfg)
-	routes.Tours(e, ToursHandler())
+	routes.Tours(e, ToursHandler(), jwtService, *cfg)
 
 	e.GET("/", func(c echo.Context) error {
 		return c.String(http.StatusOK, "Hello anjay mabar!")

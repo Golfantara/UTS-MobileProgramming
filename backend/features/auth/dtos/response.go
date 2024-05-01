@@ -1,10 +1,14 @@
 package dtos
 
+import "uts-flutter/features/tours"
+
 type ResUser struct {
 	ID       int    `json:"id"`
 	RoleID   int    `json:"role_id"`
 	Username string `json:"username"`
 	Fullname string `json:"fullname"`
+
+	Tours []tours.Tours
 }
 
 type LoginResponse struct {

@@ -2,6 +2,7 @@ package auth
 
 import (
 	"time"
+	"uts-flutter/features/tours"
 
 	"gorm.io/gorm"
 )
@@ -15,4 +16,6 @@ type User struct {
 	CreatedAt      time.Time
 	UpdatedAt      time.Time
 	DeletedAt      gorm.DeletedAt `gorm:"index"`
+
+	Tours		   []tours.Tours `gorm:"foreignKey:UserID;references:ID"`
 }

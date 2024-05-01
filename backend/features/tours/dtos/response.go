@@ -4,6 +4,7 @@ import "time"
 
 type ResTours struct {
 	ID			int		`json:"id" form:"id"`
+	UserID		int		`json:"user_id" form:"user_id"`
 	Name       string `json:"name" form:"name"`
 	Provinsi   string `json:"provinsi" form:"provinsi"`
 	Kabkot     string `json:"kabkot" form:"kabkot"`
