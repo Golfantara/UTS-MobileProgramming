@@ -6,7 +6,6 @@ import 'package:tour_app/screens/tours/get_tours.dart';
 import 'package:tour_app/services/services_create_tours.dart';
 import 'package:tour_app/services/services_province.dart';
 import 'package:tour_app/services/services_regency.dart';
-import 'dart:convert';
 
 class CreateTourScreen extends StatefulWidget {
   const CreateTourScreen({super.key});
@@ -53,11 +52,8 @@ class _CreateTourScreenState extends State<CreateTourScreen> {
       String longtitude,
       dynamic images,
       String accessToken) async {
-    List<int> imageBytes = await _image!.readAsBytes();
-    String base64Image = base64Encode(imageBytes);
-
-    final data = await _toursServices.CreateTour(
-        name, provinsi, kabkot, latitude, longtitude, base64Image, accessToken);
+    final data = await _toursServices.createTour(
+        name, provinsi, kabkot, latitude, longtitude, images, accessToken);
 
     if (data != null) {
       Navigator.push(

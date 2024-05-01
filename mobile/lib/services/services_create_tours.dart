@@ -4,29 +4,32 @@ import '../utils/utils.dart';
 class ToursServices {
   final Dio _dio = Dio();
 
-  Future CreateTour(
+  Future createTour(
       String name,
       String provinsi,
       String kabkot,
       String latitude,
-      String longtitude,
+      String longitude,
       dynamic images,
       String? accessToken) async {
     try {
+      FormData formData = FormData.fromMap({
+        'name': name,
+        'provinsi': provinsi,
+        'kabkot': kabkot,
+        'latitude': latitude,
+        'longitude': longitude,
+        'images':
+            await MultipartFile.fromFile(images.path, filename: 'image.jpg'),
+      });
+
       final response = await _dio.post(
         Urls.baseUrl + Urls.tours,
+        data: formData,
         options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
-        data: {
-          'name': name,
-          'provinsi': provinsi,
-          'kabkot': kabkot,
-          'latitude': latitude,
-          'longitude': longtitude,
-          'images': images,
-        },
       );
-      final jsonData = response.data;
-      return jsonData;
+
+      return response.data;
     } catch (error) {
       print('Terjadi kesalahan saat melakukan permintaan: $error');
       return null;
