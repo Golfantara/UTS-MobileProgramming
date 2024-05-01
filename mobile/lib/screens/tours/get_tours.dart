@@ -4,6 +4,7 @@ import 'package:tour_app/screens/tours/create_tour.dart';
 import 'package:dio/dio.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:tour_app/screens/tours/update_tour.dart';
+import 'package:tour_app/services/services_tours.dart';
 
 class GetTourScreen extends StatefulWidget {
   const GetTourScreen({super.key});
@@ -16,6 +17,7 @@ class GetTourScreen extends StatefulWidget {
 class _GetTourScreenState extends State<GetTourScreen> {
   final PagingController<int, dynamic> _pagingController =
       PagingController(firstPageKey: 1);
+  final ToursServices _toursServices = ToursServices();
 
   @override
   void initState() {
@@ -23,6 +25,16 @@ class _GetTourScreenState extends State<GetTourScreen> {
       _fetchPage(pageKey);
     });
     super.initState();
+  }
+
+  void deleteTour(dynamic id) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    try {
+      await _toursServices.deleteTour(id, prefs.getString('accessToken')!);
+      _pagingController.refresh();
+    } catch (error) {
+      print('Terjadi kesalahan saat melakukan permintaan: $error');
+    }
   }
 
   @override
@@ -198,7 +210,36 @@ class _GetTourScreenState extends State<GetTourScreen> {
                                 FractionallySizedBox(
                                   widthFactor: 0.8,
                                   child: OutlinedButton(
-                                    onPressed: () => {},
+                                    onPressed: () => {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            title: const Text('Konfirmasi'),
+                                            content: const Text(
+                                                'Apakah Anda yakin ingin menghapus tour ini?'),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context)
+                                                      .pop(); // Tutup dialog
+                                                },
+                                                child: const Text('Batal'),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context)
+                                                      .pop(); // Tutup dialog
+                                                  deleteTour(item[
+                                                      'id']); // Panggil metode _deleteTour dengan id tour yang dipilih
+                                                },
+                                                child: const Text('Hapus'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      )
+                                    },
                                     style: OutlinedButton.styleFrom(
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(

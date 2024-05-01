@@ -35,4 +35,15 @@ class ToursServices {
       return null;
     }
   }
+
+  Future deleteTour(dynamic id, String accessToken) async {
+    try {
+      await _dio.delete(
+        '${Urls.baseUrl}${Urls.tours}/$id',
+        options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
+      );
+    } catch (error) {
+      print('Terjadi kesalahan saat melakukan permintaan: $error');
+    }
+  }
 }

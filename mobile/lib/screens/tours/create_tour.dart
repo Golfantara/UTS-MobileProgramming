@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tour_app/screens/tours/get_tours.dart';
-import 'package:tour_app/services/services_create_tours.dart';
+import 'package:tour_app/services/services_tours.dart';
 import 'package:tour_app/services/services_province.dart';
 import 'package:tour_app/services/services_regency.dart';
 
