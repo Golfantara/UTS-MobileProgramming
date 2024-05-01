@@ -7,4 +7,5 @@ class Urls {
       "https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json";
   static const String regencyUrl =
       "https://www.emsifa.com/api-wilayah-indonesia/api/regencies";
+  static const String tours = "/tours";
 }

@@ -1,6 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tour_app/screens/tours/get_tours.dart';
+import 'package:tour_app/services/services_create_tours.dart';
 import 'package:tour_app/services/services_province.dart';
 import 'package:tour_app/services/services_regency.dart';
 
@@ -15,20 +18,51 @@ class CreateTourScreen extends StatefulWidget {
 class _CreateTourScreenState extends State<CreateTourScreen> {
   TextEditingController name = TextEditingController();
   TextEditingController latitude = TextEditingController();
-  TextEditingController longitude = TextEditingController();
+  TextEditingController longtitude = TextEditingController();
   String? province;
   String? regency;
   File? _image;
   final picker = ImagePicker();
   final ProvincesService _provincesService = ProvincesService();
   final RegencyService _regencyService = RegencyService();
+  final ToursServices _toursServices = ToursServices();
   List<Map<String, String>> provincesData = [];
   List<Map<String, String>> regenciesData = [];
+  String? accessToken;
 
   @override
   void initState() {
     super.initState();
     _fetchProvinces();
+    _loadAccessToken();
+  }
+
+  void _loadAccessToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      accessToken = prefs.getString('accessToken') ?? '';
+    });
+  }
+
+  Future<void> _createTour(
+      dynamic name,
+      dynamic provinsi,
+      dynamic kabkot,
+      dynamic latitude,
+      dynamic longtitude,
+      dynamic images,
+      dynamic accessToken) async {
+    final data = await _toursServices.CreateTour(
+        name, provinsi, kabkot, latitude, longtitude, images, accessToken);
+
+    if (data != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const GetTourScreen(),
+        ),
+      );
+    }
   }
 
   Future<void> _fetchProvinces() async {
@@ -193,9 +227,9 @@ class _CreateTourScreenState extends State<CreateTourScreen> {
                 FractionallySizedBox(
                   widthFactor: 0.7,
                   child: TextField(
-                    controller: longitude,
+                    controller: longtitude,
                     decoration: const InputDecoration(
-                      labelText: 'Masukan longitude',
+                      labelText: 'Masukan longtitude',
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -242,8 +276,8 @@ class _CreateTourScreenState extends State<CreateTourScreen> {
                     widthFactor: 0.7,
                     child: ElevatedButton(
                         onPressed: () async {
-                          print(
-                              "Latitude: ${latitude.text} Longitude: ${longitude.text} Image: ${_image} Name: ${name.text}  Provinsi: ${provincesData.firstWhere((element) => element['id'] == province)['name']}  Kabkot: ${regenciesData.firstWhere((element) => element['id'] == regency)['name']}");
+                          _createTour(name, province, regency, latitude,
+                              longtitude, _image, accessToken);
                         },
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.tealAccent[700],
