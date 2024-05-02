@@ -85,7 +85,7 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
     formData.fields.add(MapEntry('kabkot', kabkot));
     formData.fields.add(MapEntry('kabkot_id', kabkotId));
     formData.fields.add(MapEntry('latitude', latitude));
-    formData.fields.add(MapEntry('longitude', longitude));
+    formData.fields.add(MapEntry('longtitude', longitude));
 
     if (images != null) {
       formData.files.add(MapEntry(
