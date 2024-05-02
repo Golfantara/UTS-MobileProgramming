@@ -58,7 +58,9 @@ func (svc *service) FindByID(toursID int) *dtos.ResTours {
 	res.ID = tours.ID
 	res.UserID = tours.UserID
 	res.Name = tours.Name
+	res.ProvinsiID = tours.ProvinsiID
 	res.Provinsi = tours.Provinsi
+	res.KabkotID = tours.KabkotID
 	res.Kabkot = tours.Kabkot
 	res.Latitude = tours.Latitude
 	res.Longtitude = tours.Longtitude
@@ -82,7 +84,9 @@ func (svc *service) Create(newTours dtos.InputTours, UserID int, file *multipart
 	tours.UserID = UserID
 	tours.Images = url
 	tours.Name = newTours.Name
+	tours.ProvinsiID = newTours.ProvinsiID
 	tours.Provinsi = newTours.Provinsi
+	tours.KabkotID = newTours.KabkotID
 	tours.Kabkot = newTours.Kabkot
 	tours.Latitude = newTours.Latitude
 	tours.Longtitude = newTours.Longtitude
@@ -98,7 +102,9 @@ func (svc *service) Create(newTours dtos.InputTours, UserID int, file *multipart
 	resTours.UserID = result.UserID
 	resTours.ID = result.ID
 	resTours.Name = result.Name
+	resTours.ProvinsiID = result.ProvinsiID
 	resTours.Provinsi = result.Provinsi
+	resTours.KabkotID = result.KabkotID
 	resTours.Kabkot = result.Kabkot
 	resTours.Latitude = result.Latitude
 	resTours.Longtitude = result.Longtitude
@@ -121,7 +127,9 @@ func (svc *service) Modify(toursData dtos.InputTours, toursID int, file *multipa
 
 	newTours := tours.Tours{
 		ID: toursID,
+		ProvinsiID: toursData.ProvinsiID,
 		Provinsi: toursData.Provinsi,
+		KabkotID: toursData.KabkotID,
 		Kabkot: toursData.Kabkot,
 		Name: toursData.Name,
 	}
