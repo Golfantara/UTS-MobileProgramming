@@ -131,6 +131,8 @@ func (svc *service) Modify(toursData dtos.InputTours, toursID int, file *multipa
 		Provinsi: toursData.Provinsi,
 		KabkotID: toursData.KabkotID,
 		Kabkot: toursData.Kabkot,
+		Latitude: toursData.Latitude,
+		Longtitude: toursData.Longtitude,
 		Name: toursData.Name,
 	}
 
