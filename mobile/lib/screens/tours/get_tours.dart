@@ -40,9 +40,10 @@ class _GetTourScreenState extends State<GetTourScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey,
       appBar: AppBar(
-        title: const Text('Explore', style: TextStyle(color: Colors.teal)),
+        backgroundColor: Colors.grey,
+        title: const Text('Explore', style: TextStyle(color: Colors.black)),
       ),
       body: Column(
         children: [
@@ -59,7 +60,7 @@ class _GetTourScreenState extends State<GetTourScreen> {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.tealAccent[700],
+                  backgroundColor: Colors.black,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),
@@ -74,13 +75,13 @@ class _GetTourScreenState extends State<GetTourScreen> {
               ),
             ),
           ),
-          FractionallySizedBox(
+          const FractionallySizedBox(
             widthFactor: 0.75,
             child: Text('Daftar Tour',
                 style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
-                    color: Colors.tealAccent[700])),
+                    color: Colors.black)),
           ),
           const SizedBox(height: 10),
           Expanded(
@@ -191,8 +192,7 @@ class _GetTourScreenState extends State<GetTourScreen> {
                                       ))
                                     },
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                          Colors.lightBlueAccent[400],
+                                      backgroundColor: Colors.black45,
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10),
                                       ),

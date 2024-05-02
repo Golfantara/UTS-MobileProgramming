@@ -46,6 +46,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.grey,
         title: const Text('Daftar Akun'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -57,7 +58,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           },
         ),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -66,7 +67,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               'Daftar Tour App',
               style: TextStyle(
                 fontSize: 30,
-                color: Colors.teal,
+                color: Colors.black,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -167,21 +168,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         }
                       },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.tealAccent[700],
+                  backgroundColor: Colors.black,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
                 child: isLoading
-                    ? Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 40, vertical: 12),
+                    ? const Padding(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 40, vertical: 12),
                         child: SizedBox(
                             height: 20,
                             width: 20,
                             child: CircularProgressIndicator(
                               strokeWidth: 3,
-                              color: Colors.tealAccent[300],
+                              color: Colors.black87,
                             )),
                       )
                     : const Padding(
@@ -219,7 +220,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     },
                     child: const Text(
                       'Masuk',
-                      style: TextStyle(color: Colors.teal, fontSize: 15),
+                      style: TextStyle(color: Colors.black, fontSize: 15),
                     ),
                   ),
                 ),

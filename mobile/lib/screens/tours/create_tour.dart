@@ -180,9 +180,10 @@ class _CreateTourScreenState extends State<CreateTourScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey,
       appBar: AppBar(
-        title: const Text('Buat Tour', style: TextStyle(color: Colors.teal)),
+        backgroundColor: Colors.grey,
+        title: const Text('Buat Tour', style: TextStyle(color: Colors.black)),
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -210,7 +211,7 @@ class _CreateTourScreenState extends State<CreateTourScreen> {
                   elevation: 16,
                   underline: Container(
                     height: 2,
-                    color: Colors.teal,
+                    color: Colors.black,
                   ),
                   onChanged: (String? newValue) {
                     setState(() {
@@ -238,7 +239,7 @@ class _CreateTourScreenState extends State<CreateTourScreen> {
                   elevation: 16,
                   underline: Container(
                     height: 2,
-                    color: Colors.teal,
+                    color: Colors.black,
                   ),
                   onChanged: (String? newValue) {
                     setState(() {
@@ -289,13 +290,13 @@ class _CreateTourScreenState extends State<CreateTourScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    side: const BorderSide(color: Colors.teal),
+                    side: const BorderSide(color: Colors.black),
                   ),
                   child: const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 36, vertical: 12),
                     child: Text(
                       'Ambil gambar',
-                      style: TextStyle(color: Colors.teal),
+                      style: TextStyle(color: Colors.black),
                     ),
                   ),
                 ),
@@ -337,7 +338,7 @@ class _CreateTourScreenState extends State<CreateTourScreen> {
                             }
                           : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.tealAccent[700],
+                    backgroundColor: Colors.black,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),

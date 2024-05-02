@@ -92,7 +92,9 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey,
       appBar: AppBar(
+        backgroundColor: Colors.grey,
         title: const Text('Masuk Akun'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -112,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
               'Masuk Tour App',
               style: TextStyle(
                 fontSize: 30,
-                color: Colors.teal,
+                color: Colors.black,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -150,8 +152,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   side: BorderSide(
                     color: isButtonDisabled || isLoading
-                        ? Colors.grey
-                        : Colors.teal,
+                        ? Colors.black12
+                        : Colors.black,
                   ),
                 ),
                 child: isLoading
@@ -161,7 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: SizedBox(
                           width: 20,
                           height: 20,
-                          child: CircularProgressIndicator(color: Colors.teal),
+                          child: CircularProgressIndicator(color: Colors.black),
                         ))
                     : Padding(
                         padding: const EdgeInsets.symmetric(
@@ -169,8 +171,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: Text(
                           'Masuk',
                           style: TextStyle(
-                              color:
-                                  isButtonDisabled ? Colors.grey : Colors.teal),
+                              color: isButtonDisabled
+                                  ? Colors.black12
+                                  : Colors.black),
                         ),
                       ),
               ),
@@ -198,7 +201,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                     child: const Text(
                       'Daftar',
-                      style: TextStyle(color: Colors.teal, fontSize: 15),
+                      style: TextStyle(color: Colors.black, fontSize: 15),
                     ),
                   ),
                 ),

@@ -46,15 +46,16 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey,
       appBar: AppBar(
-        title: const Text('Tour App', style: TextStyle(color: Colors.teal)),
+        backgroundColor: Colors.grey,
+        title: const Text('Tour App', style: TextStyle(color: Colors.black)),
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
             style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.red),
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.orange),
             ),
             onPressed: () {
               showDialog(
@@ -139,7 +140,7 @@ class _MainScreenState extends State<MainScreen> {
                 );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.tealAccent[700],
+                backgroundColor: Colors.black,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),

@@ -8,16 +8,16 @@ class AuthScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/travel.png', width: 150, height: 150),
+            Image.asset('assets/download.png', width: 150, height: 150),
             const SizedBox(height: 30),
             const Text(
               'Selamat Datang di Aplikasi Tour App',
-              style: TextStyle(fontSize: 18, color: Colors.teal),
+              style: TextStyle(fontSize: 18, color: Colors.black),
             ),
             const SizedBox(height: 30),
             FractionallySizedBox(
@@ -34,13 +34,13 @@ class AuthScreen extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20), // Rounded edges
                   ),
-                  side: const BorderSide(color: Colors.teal), // Teal border
+                  side: const BorderSide(color: Colors.black), // Teal border
                 ),
                 child: const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 36, vertical: 12),
                   child: Text(
                     'Masuk',
-                    style: TextStyle(color: Colors.teal),
+                    style: TextStyle(color: Colors.black),
                   ),
                 ),
               ),
@@ -57,7 +57,7 @@ class AuthScreen extends StatelessWidget {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.tealAccent[700],
+                  backgroundColor: Colors.black,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                   ),

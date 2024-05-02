@@ -216,9 +216,10 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey,
       appBar: AppBar(
-        title: const Text('Edit Tour', style: TextStyle(color: Colors.teal)),
+        backgroundColor: Colors.grey,
+        title: const Text('Edit Tour', style: TextStyle(color: Colors.black)),
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -246,7 +247,7 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
                   elevation: 16,
                   underline: Container(
                     height: 2,
-                    color: Colors.teal,
+                    color: Colors.black,
                   ),
                   onChanged: (String? newValue) {
                     setState(() {
@@ -274,7 +275,7 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
                   elevation: 16,
                   underline: Container(
                     height: 2,
-                    color: Colors.teal,
+                    color: Colors.black,
                   ),
                   onChanged: (String? newValue) {
                     setState(() {
@@ -325,13 +326,13 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    side: const BorderSide(color: Colors.teal),
+                    side: const BorderSide(color: Colors.black),
                   ),
                   child: const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 36, vertical: 12),
                     child: Text(
                       'Ambil gambar',
-                      style: TextStyle(color: Colors.teal),
+                      style: TextStyle(color: Colors.black),
                     ),
                   ),
                 ),
@@ -374,7 +375,7 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
                             }
                           : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.tealAccent[700],
+                    backgroundColor: Colors.black,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -387,7 +388,7 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
                             width: 20,
                             height: 20,
                             child:
-                                CircularProgressIndicator(color: Colors.teal),
+                                CircularProgressIndicator(color: Colors.black),
                           ))
                       : const Padding(
                           padding: EdgeInsets.symmetric(vertical: 14),
