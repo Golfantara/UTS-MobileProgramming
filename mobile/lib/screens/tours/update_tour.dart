@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,7 +9,9 @@ import 'package:tour_app/services/services_province.dart';
 import 'package:tour_app/services/services_regency.dart';
 
 class UpdateTourScreen extends StatefulWidget {
-  const UpdateTourScreen({super.key});
+  final int tourId;
+
+  const UpdateTourScreen({super.key, required this.tourId});
 
   @override
   // ignore: library_private_types_in_public_api
@@ -21,6 +24,7 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
   TextEditingController longtitude = TextEditingController();
   String? province;
   String? regency;
+  String? imageCloud;
   File? _image;
   final picker = ImagePicker();
   final ProvincesService _provincesService = ProvincesService();
@@ -36,6 +40,7 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
     super.initState();
     _fetchProvinces();
     _loadAccessToken();
+    _getTourById();
   }
 
   void _loadAccessToken() async {
@@ -52,37 +57,73 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
           longtitude.text.isNotEmpty &&
           province != null &&
           regency != null &&
-          _image != null;
+          (_image != null || imageCloud != null);
     });
   }
 
-  void _createTour(
+  void _updateTour(
     String name,
     String provinsi,
+    String provinsiId,
     String kabkot,
+    String kabkotId,
     String latitude,
-    String longtitude,
-    dynamic images,
-    String accessToken,
+    String longitude,
+    File? images,
   ) async {
-    // final data = await _toursServices.createTour(
-    //   name,
-    //   provinsi,
-    //   kabkot,
-    //   latitude,
-    //   longtitude,
-    //   images,
-    //   accessToken,
-    // );
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    // if (data != null) {
-    //   Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //       builder: (context) => const GetTourScreen(),
-    //     ),
-    //   );
-    // }
+    FormData formData = FormData();
+
+    formData.fields.add(MapEntry('name', name));
+    formData.fields.add(MapEntry('provinsi', provinsi));
+    formData.fields.add(MapEntry('provinsi_id', provinsiId));
+    formData.fields.add(MapEntry('kabkot', kabkot));
+    formData.fields.add(MapEntry('kabkot_id', kabkotId));
+    formData.fields.add(MapEntry('latitude', latitude));
+    formData.fields.add(MapEntry('longitude', longitude));
+
+    if (images != null) {
+      formData.files.add(MapEntry(
+        'images',
+        await MultipartFile.fromFile(images.path, filename: 'image.jpg'),
+      ));
+    }
+
+    final data = await _toursServices.updateTour(
+      widget.tourId,
+      formData,
+      prefs.getString('accessToken')!,
+    );
+
+    if (data != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const GetTourScreen(),
+        ),
+      );
+    }
+  }
+
+  Future<void> _getTourById() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    final data = await _toursServices.getTourById(
+        widget.tourId, prefs.getString('accessToken')!);
+    if (data != null) {
+      setState(() {
+        name = TextEditingController(text: data['data']['name']);
+        latitude = TextEditingController(text: data['data']['latitude']);
+        longtitude = TextEditingController(text: data['data']['longtitude']);
+        province = data['data']['provinsi_id'];
+        regency = data['data']['kabkot_id'];
+        imageCloud = data['data']['images'];
+      });
+    }
+
+    _fetchRegencies(province!);
+    _validateInputs();
   }
 
   Future<void> _fetchProvinces() async {
@@ -198,8 +239,6 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
                   onChanged: (String? newValue) {
                     setState(() {
                       province = newValue!;
-                    });
-                    setState(() {
                       regency = null;
                     });
                     _fetchRegencies(newValue!);
@@ -289,10 +328,12 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
               FractionallySizedBox(
                 widthFactor: 0.7,
                 child: _image == null
-                    ? Image.network(
-                        "https://upload.wikimedia.org/wikipedia/commons/d/d1/Image_not_available.png",
-                        height: 200,
-                      )
+                    ? (imageCloud != null
+                        ? Image.network(
+                            imageCloud!,
+                            height: 200,
+                          )
+                        : Container())
                     : Image.file(
                         _image!,
                         height: 200,
@@ -304,15 +345,18 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
                 child: ElevatedButton(
                   onPressed: isValid
                       ? () async {
-                          // _createTour(
-                          //   name.text,
-                          //   province!,
-                          //   regency!,
-                          //   latitude.text,
-                          //   longtitude.text,
-                          //   _image!,
-                          //   accessToken!,
-                          // );
+                          _updateTour(
+                            name.text,
+                            provincesData.firstWhere((element) =>
+                                element['id'] == province)['name']!,
+                            province!,
+                            regenciesData.firstWhere(
+                                (element) => element['id'] == regency)['name']!,
+                            regency!,
+                            latitude.text,
+                            longtitude.text,
+                            _image,
+                          );
                         }
                       : null,
                   style: ElevatedButton.styleFrom(

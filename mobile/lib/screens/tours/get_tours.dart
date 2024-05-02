@@ -185,8 +185,9 @@ class _GetTourScreenState extends State<GetTourScreen> {
                                     onPressed: () => {
                                       Navigator.of(context)
                                           .push(MaterialPageRoute(
-                                        builder: (context) =>
-                                            const UpdateTourScreen(),
+                                        builder: (context) => UpdateTourScreen(
+                                          tourId: item['id'],
+                                        ),
                                       ))
                                     },
                                     style: ElevatedButton.styleFrom(

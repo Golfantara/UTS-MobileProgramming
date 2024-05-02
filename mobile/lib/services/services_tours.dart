@@ -40,6 +40,33 @@ class ToursServices {
     }
   }
 
+  Future getTourById(dynamic id, String accessToken) async {
+    try {
+      final response = await _dio.get(
+        '${Urls.baseUrl}${Urls.tours}/$id',
+        options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
+      );
+      return response.data;
+    } catch (error) {
+      print('Terjadi kesalahan saat melakukan permintaan: $error');
+      return null;
+    }
+  }
+
+  Future updateTour(dynamic id, FormData formData, String? accessToken) async {
+    try {
+      final response = await _dio.put(
+        '${Urls.baseUrl}${Urls.tours}/$id',
+        data: formData,
+        options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
+      );
+      return response.data;
+    } catch (error) {
+      print('Terjadi kesalahan saat melakukan permintaan: $error');
+      return null;
+    }
+  }
+
   Future deleteTour(dynamic id, String accessToken) async {
     try {
       await _dio.delete(
