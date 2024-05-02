@@ -295,6 +295,9 @@ class _GetTourScreenState extends State<GetTourScreen> {
       }
     } catch (error) {
       _pagingController.error = error;
+      if (error is DioException && error.response?.statusCode == 404) {
+        _pagingController.appendLastPage([]);
+      }
     }
   }
 
