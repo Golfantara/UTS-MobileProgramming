@@ -34,6 +34,7 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
   List<Map<String, String>> regenciesData = [];
   String? accessToken;
   bool isValid = false;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -71,6 +72,9 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
     String longitude,
     File? images,
   ) async {
+    setState(() {
+      isLoading = true;
+    });
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     FormData formData = FormData();
@@ -103,7 +107,15 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
           builder: (context) => const GetTourScreen(),
         ),
       );
+
+      setState(() {
+        isLoading = false;
+      });
     }
+
+    setState(() {
+      isLoading = false;
+    });
   }
 
   Future<void> _getTourById() async {
@@ -343,35 +355,47 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
               FractionallySizedBox(
                 widthFactor: 0.7,
                 child: ElevatedButton(
-                  onPressed: isValid
-                      ? () async {
-                          _updateTour(
-                            name.text,
-                            provincesData.firstWhere((element) =>
-                                element['id'] == province)['name']!,
-                            province!,
-                            regenciesData.firstWhere(
-                                (element) => element['id'] == regency)['name']!,
-                            regency!,
-                            latitude.text,
-                            longtitude.text,
-                            _image,
-                          );
-                        }
-                      : null,
+                  onPressed: isLoading
+                      ? null
+                      : isValid
+                          ? () async {
+                              _updateTour(
+                                name.text,
+                                provincesData.firstWhere((element) =>
+                                    element['id'] == province)['name']!,
+                                province!,
+                                regenciesData.firstWhere((element) =>
+                                    element['id'] == regency)['name']!,
+                                regency!,
+                                latitude.text,
+                                longtitude.text,
+                                _image,
+                              );
+                            }
+                          : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.tealAccent[700],
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 14),
-                    child: Text(
-                      'Simpan perubahan data',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
+                  child: isLoading
+                      ? const Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 36, vertical: 12),
+                          child: SizedBox(
+                            width: 20,
+                            height: 20,
+                            child:
+                                CircularProgressIndicator(color: Colors.teal),
+                          ))
+                      : const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 14),
+                          child: Text(
+                            'Simpan perubahan data',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
                 ),
               ),
               const SizedBox(height: 20)
