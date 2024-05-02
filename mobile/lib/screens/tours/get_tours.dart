@@ -160,7 +160,7 @@ class _GetTourScreenState extends State<GetTourScreen> {
                                       ]),
                                       const SizedBox(height: 5),
                                       Row(children: [
-                                        const Text('Longtitude'),
+                                        const Text('longtitude'),
                                         const SizedBox(width: 49),
                                         const Text(':'),
                                         const SizedBox(width: 10),

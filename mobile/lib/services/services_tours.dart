@@ -7,7 +7,9 @@ class ToursServices {
   Future createTour(
       String name,
       String provinsi,
+      String? provinsiId,
       String kabkot,
+      String? kabkotId,
       String latitude,
       String longitude,
       dynamic images,
@@ -16,9 +18,11 @@ class ToursServices {
       FormData formData = FormData.fromMap({
         'name': name,
         'provinsi': provinsi,
+        'provinsi_id': provinsiId,
         'kabkot': kabkot,
+        'kabkot_id': kabkotId,
         'latitude': latitude,
-        'longitude': longitude,
+        'longtitude': longitude,
         'images':
             await MultipartFile.fromFile(images.path, filename: 'image.jpg'),
       });

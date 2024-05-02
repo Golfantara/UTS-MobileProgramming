@@ -65,24 +65,24 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
     dynamic images,
     String accessToken,
   ) async {
-    final data = await _toursServices.createTour(
-      name,
-      provinsi,
-      kabkot,
-      latitude,
-      longtitude,
-      images,
-      accessToken,
-    );
+    // final data = await _toursServices.createTour(
+    //   name,
+    //   provinsi,
+    //   kabkot,
+    //   latitude,
+    //   longtitude,
+    //   images,
+    //   accessToken,
+    // );
 
-    if (data != null) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const GetTourScreen(),
-        ),
-      );
-    }
+    // if (data != null) {
+    //   Navigator.push(
+    //     context,
+    //     MaterialPageRoute(
+    //       builder: (context) => const GetTourScreen(),
+    //     ),
+    //   );
+    // }
   }
 
   Future<void> _fetchProvinces() async {
@@ -304,15 +304,15 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
                 child: ElevatedButton(
                   onPressed: isValid
                       ? () async {
-                          _createTour(
-                            name.text,
-                            province!,
-                            regency!,
-                            latitude.text,
-                            longtitude.text,
-                            _image!,
-                            accessToken!,
-                          );
+                          // _createTour(
+                          //   name.text,
+                          //   province!,
+                          //   regency!,
+                          //   latitude.text,
+                          //   longtitude.text,
+                          //   _image!,
+                          //   accessToken!,
+                          // );
                         }
                       : null,
                   style: ElevatedButton.styleFrom(

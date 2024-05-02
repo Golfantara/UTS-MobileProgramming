@@ -59,7 +59,9 @@ class _CreateTourScreenState extends State<CreateTourScreen> {
   void _createTour(
     String name,
     String provinsi,
+    String provinsiId,
     String kabkot,
+    String kabkotId,
     String latitude,
     String longtitude,
     dynamic images,
@@ -68,7 +70,9 @@ class _CreateTourScreenState extends State<CreateTourScreen> {
     final data = await _toursServices.createTour(
       name,
       provinsi,
+      provinsiId,
       kabkot,
+      kabkotId,
       latitude,
       longtitude,
       images,
@@ -198,8 +202,6 @@ class _CreateTourScreenState extends State<CreateTourScreen> {
                   onChanged: (String? newValue) {
                     setState(() {
                       province = newValue!;
-                    });
-                    setState(() {
                       regency = null;
                     });
                     _fetchRegencies(newValue!);
@@ -306,7 +308,11 @@ class _CreateTourScreenState extends State<CreateTourScreen> {
                       ? () async {
                           _createTour(
                             name.text,
+                            provincesData.firstWhere((element) =>
+                                element['id'] == province)['name']!,
                             province!,
+                            regenciesData.firstWhere(
+                                (element) => element['id'] == regency)['name']!,
                             regency!,
                             latitude.text,
                             longtitude.text,
