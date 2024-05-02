@@ -1,6 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tour_app/screens/tours/get_tours.dart';
+import 'package:tour_app/services/services_tours.dart';
 import 'package:tour_app/services/services_province.dart';
 import 'package:tour_app/services/services_regency.dart';
 
@@ -15,20 +18,71 @@ class UpdateTourScreen extends StatefulWidget {
 class _UpdateTourScreenState extends State<UpdateTourScreen> {
   TextEditingController name = TextEditingController();
   TextEditingController latitude = TextEditingController();
-  TextEditingController longitude = TextEditingController();
+  TextEditingController longtitude = TextEditingController();
   String? province;
   String? regency;
   File? _image;
   final picker = ImagePicker();
   final ProvincesService _provincesService = ProvincesService();
   final RegencyService _regencyService = RegencyService();
+  final ToursServices _toursServices = ToursServices();
   List<Map<String, String>> provincesData = [];
   List<Map<String, String>> regenciesData = [];
+  String? accessToken;
+  bool isValid = false;
 
   @override
   void initState() {
     super.initState();
     _fetchProvinces();
+    _loadAccessToken();
+  }
+
+  void _loadAccessToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      accessToken = prefs.getString('accessToken') ?? '';
+    });
+  }
+
+  void _validateInputs() {
+    setState(() {
+      isValid = name.text.isNotEmpty &&
+          latitude.text.isNotEmpty &&
+          longtitude.text.isNotEmpty &&
+          province != null &&
+          regency != null &&
+          _image != null;
+    });
+  }
+
+  void _createTour(
+    String name,
+    String provinsi,
+    String kabkot,
+    String latitude,
+    String longtitude,
+    dynamic images,
+    String accessToken,
+  ) async {
+    final data = await _toursServices.createTour(
+      name,
+      provinsi,
+      kabkot,
+      latitude,
+      longtitude,
+      images,
+      accessToken,
+    );
+
+    if (data != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const GetTourScreen(),
+        ),
+      );
+    }
   }
 
   Future<void> _fetchProvinces() async {
@@ -55,7 +109,7 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
     }
   }
 
-  Future getImageFromGallery() async {
+  Future<void> getImageFromGallery() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     setState(() {
@@ -63,9 +117,11 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
         _image = File(pickedFile.path);
       }
     });
+
+    _validateInputs();
   }
 
-  Future getImageFromCamera() async {
+  Future<void> getImageFromCamera() async {
     final pickedFile = await picker.pickImage(source: ImageSource.camera);
 
     setState(() {
@@ -73,6 +129,8 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
         _image = File(pickedFile.path);
       }
     });
+
+    _validateInputs();
   }
 
   Future<void> showOptions(BuildContext context) async {
@@ -86,7 +144,6 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
               title: const Text('Gallery'),
               onTap: () {
                 Navigator.of(context).pop();
-
                 getImageFromGallery();
               },
             ),
@@ -94,7 +151,6 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
               title: const Text('Camera'),
               onTap: () {
                 Navigator.of(context).pop();
-
                 getImageFromCamera();
               },
             ),
@@ -107,161 +163,178 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          title:
-              const Text('Update Tour', style: TextStyle(color: Colors.teal)),
-        ),
-        body: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: [
-                const SizedBox(height: 20),
-                FractionallySizedBox(
-                  widthFactor: 0.7,
-                  child: TextField(
-                    controller: name,
-                    decoration: const InputDecoration(
-                      labelText: 'Masukan nama tour',
-                      border: OutlineInputBorder(),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text('Edit Tour', style: TextStyle(color: Colors.teal)),
+      ),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
+              FractionallySizedBox(
+                widthFactor: 0.7,
+                child: TextField(
+                  controller: name,
+                  onChanged: (_) => _validateInputs(),
+                  decoration: const InputDecoration(
+                    labelText: 'Masukan nama tour',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              FractionallySizedBox(
+                widthFactor: 0.7,
+                child: DropdownButton<String>(
+                  isExpanded: true,
+                  value: province,
+                  hint: const Text('Pilih Provinsi'),
+                  elevation: 16,
+                  underline: Container(
+                    height: 2,
+                    color: Colors.teal,
+                  ),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      province = newValue!;
+                    });
+                    setState(() {
+                      regency = null;
+                    });
+                    _fetchRegencies(newValue!);
+                    _validateInputs();
+                  },
+                  items: provincesData.map((Map<String, String> province) {
+                    return DropdownMenuItem(
+                      value: province['id'],
+                      child: Text(province['name']!),
+                    );
+                  }).toList(),
+                ),
+              ),
+              const SizedBox(height: 10),
+              FractionallySizedBox(
+                widthFactor: 0.7,
+                child: DropdownButton<String>(
+                  isExpanded: true,
+                  value: regency,
+                  hint: const Text('Pilih Kota/Kabupaten'),
+                  elevation: 16,
+                  underline: Container(
+                    height: 2,
+                    color: Colors.teal,
+                  ),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      regency = newValue!;
+                    });
+                    _validateInputs();
+                  },
+                  items: regenciesData.map((Map<String, String> regency) {
+                    return DropdownMenuItem(
+                      value: regency['id'],
+                      child: Text(regency['name']!),
+                    );
+                  }).toList(),
+                ),
+              ),
+              const SizedBox(height: 10),
+              FractionallySizedBox(
+                widthFactor: 0.7,
+                child: TextField(
+                  controller: latitude,
+                  onChanged: (_) => _validateInputs(),
+                  decoration: const InputDecoration(
+                    labelText: 'Masukan Latitude',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              FractionallySizedBox(
+                widthFactor: 0.7,
+                child: TextField(
+                  controller: longtitude,
+                  onChanged: (_) => _validateInputs(),
+                  decoration: const InputDecoration(
+                    labelText: 'Masukan longtitude',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              FractionallySizedBox(
+                widthFactor: 0.7,
+                child: OutlinedButton(
+                  onPressed: () {
+                    showOptions(context);
+                  },
+                  style: OutlinedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    side: const BorderSide(color: Colors.teal),
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 36, vertical: 12),
+                    child: Text(
+                      'Ambil gambar',
+                      style: TextStyle(color: Colors.teal),
                     ),
                   ),
                 ),
-                const SizedBox(height: 10),
-                FractionallySizedBox(
-                  widthFactor: 0.7,
-                  child: DropdownButton<String>(
-                    isExpanded: true,
-                    value: province,
-                    hint: const Text('Pilih Provinsi'),
-                    elevation: 16,
-                    underline: Container(
-                      height: 2,
-                      color: Colors.teal,
-                    ),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        province = newValue!;
-                      });
-                      setState(() {
-                        regency = null;
-                      });
-                      _fetchRegencies(newValue!);
-                    },
-                    items: provincesData.map((Map<String, String> province) {
-                      return DropdownMenuItem(
-                        value: province['id'],
-                        child: Text(province['name']!),
-                      );
-                    }).toList(),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                FractionallySizedBox(
-                  widthFactor: 0.7,
-                  child: DropdownButton<String>(
-                      isExpanded: true,
-                      value: regency,
-                      hint: const Text('Pilih Kota/Kabupaten'),
-                      elevation: 16,
-                      underline: Container(
-                        height: 2,
-                        color: Colors.teal,
+              ),
+              const SizedBox(height: 10),
+              FractionallySizedBox(
+                widthFactor: 0.7,
+                child: _image == null
+                    ? Image.network(
+                        "https://upload.wikimedia.org/wikipedia/commons/d/d1/Image_not_available.png",
+                        height: 200,
+                      )
+                    : Image.file(
+                        _image!,
+                        height: 200,
                       ),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          regency = newValue!;
-                        });
-                      },
-                      items: regenciesData.map((Map<String, String> regency) {
-                        return DropdownMenuItem(
-                          value: regency['id'],
-                          child: Text(regency['name']!),
-                        );
-                      }).toList()),
-                ),
-                FractionallySizedBox(
-                  widthFactor: 0.7,
-                  child: TextField(
-                    controller: latitude,
-                    decoration: const InputDecoration(
-                      labelText: 'Masukan Latitude',
-                      border: OutlineInputBorder(),
+              ),
+              const SizedBox(height: 15),
+              FractionallySizedBox(
+                widthFactor: 0.7,
+                child: ElevatedButton(
+                  onPressed: isValid
+                      ? () async {
+                          _createTour(
+                            name.text,
+                            province!,
+                            regency!,
+                            latitude.text,
+                            longtitude.text,
+                            _image!,
+                            accessToken!,
+                          );
+                        }
+                      : null,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.tealAccent[700],
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 14),
+                    child: Text(
+                      'Simpan perubahan data',
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                 ),
-                const SizedBox(height: 10),
-                FractionallySizedBox(
-                  widthFactor: 0.7,
-                  child: TextField(
-                    controller: longitude,
-                    decoration: const InputDecoration(
-                      labelText: 'Masukan longitude',
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                FractionallySizedBox(
-                  widthFactor: 0.7,
-                  child: OutlinedButton(
-                    onPressed: () {
-                      showOptions(context);
-                    },
-                    style: OutlinedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(10), // Rounded edges
-                      ),
-                      side: const BorderSide(color: Colors.teal), // Teal border
-                    ),
-                    child: const Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 36, vertical: 12),
-                      child: Text(
-                        'Ambil gambar',
-                        style: TextStyle(color: Colors.teal),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                FractionallySizedBox(
-                  widthFactor: 0.7,
-                  child: _image == null
-                      ? Image.network(
-                          "https://upload.wikimedia.org/wikipedia/commons/d/d1/Image_not_available.png",
-                          height: 200,
-                        )
-                      : Image.file(
-                          _image!,
-                          height: 200,
-                        ),
-                ),
-                const SizedBox(height: 15),
-                FractionallySizedBox(
-                    widthFactor: 0.7,
-                    child: ElevatedButton(
-                        onPressed: () async {
-                          print(
-                              "Latitude: ${latitude.text} Longitude: ${longitude.text} Image: ${_image} Name: ${name.text}  Provinsi: ${provincesData.firstWhere((element) => element['id'] == province)['name']}  Kabkot: ${regenciesData.firstWhere((element) => element['id'] == regency)['name']}");
-                        },
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.tealAccent[700],
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            )),
-                        child: const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 14),
-                          child: Text(
-                            'Simpan perubahan data',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ))),
-                const SizedBox(height: 20)
-              ],
-            ),
+              ),
+              const SizedBox(height: 20)
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
