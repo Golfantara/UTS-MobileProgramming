@@ -180,9 +180,7 @@ class _CreateTourScreenState extends State<CreateTourScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey,
       appBar: AppBar(
-        backgroundColor: Colors.grey,
         title: const Text('Buat Tour', style: TextStyle(color: Colors.black)),
       ),
       body: SingleChildScrollView(
@@ -351,7 +349,7 @@ class _CreateTourScreenState extends State<CreateTourScreen> {
                             width: 20,
                             height: 20,
                             child:
-                                CircularProgressIndicator(color: Colors.teal),
+                                CircularProgressIndicator(color: Colors.black),
                           ))
                       : const Padding(
                           padding: EdgeInsets.symmetric(

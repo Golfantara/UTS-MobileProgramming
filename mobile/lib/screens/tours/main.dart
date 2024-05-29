@@ -46,9 +46,7 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey,
       appBar: AppBar(
-        backgroundColor: Colors.grey,
         title: const Text('Tour App', style: TextStyle(color: Colors.black)),
         automaticallyImplyLeading: false,
         actions: [

@@ -92,9 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey,
       appBar: AppBar(
-        backgroundColor: Colors.grey,
         title: const Text('Masuk Akun'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),

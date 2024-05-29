@@ -46,7 +46,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.grey,
         title: const Text('Daftar Akun'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -58,7 +57,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
           },
         ),
       ),
-      backgroundColor: Colors.grey,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

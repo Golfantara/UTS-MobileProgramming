@@ -216,9 +216,7 @@ class _UpdateTourScreenState extends State<UpdateTourScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey,
       appBar: AppBar(
-        backgroundColor: Colors.grey,
         title: const Text('Edit Tour', style: TextStyle(color: Colors.black)),
       ),
       body: SingleChildScrollView(

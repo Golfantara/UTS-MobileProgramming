@@ -40,9 +40,7 @@ class _GetTourScreenState extends State<GetTourScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey,
       appBar: AppBar(
-        backgroundColor: Colors.grey,
         title: const Text('Explore', style: TextStyle(color: Colors.black)),
       ),
       body: Column(
@@ -192,7 +190,7 @@ class _GetTourScreenState extends State<GetTourScreen> {
                                       ))
                                     },
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.black45,
+                                      backgroundColor: Colors.black87,
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10),
                                       ),
